@@ -1,16 +1,21 @@
-
 <?php 
 
 		$fromData_arr = $_POST;
 
 			if ($fromData_arr['uVal'] == 'kg') {
-				$bmiR = ($fromData_arr['weight']*10000)/(pow($fromData_arr['height'],2));
+				$weight = $fromData_arr['weight'];
+				$height = $fromData_arr['height'];
+				$weight = str_replace(',', '.', $weight);
+				$height = str_replace('.', '', $height);
+				$height = str_replace(',', '', $height);
+				
+				$bmiR = ($weight*10000)/(pow($height,2));
 				$bmi = round($bmiR,2);
 
-				$weight_lbs = round(($fromData_arr['weight']*2.2),2);
-				$height_in = round(($fromData_arr['height']*0.393700787),2);
-				$weight_str = $fromData_arr['weight'].' kg';
-				$height_str = $fromData_arr['height'].' cm';
+				$weight_lbs = round(($weight*2.2),2);
+				$height_in = round(($height*0.393700787),2);
+				$weight_str = $weight.' kg';
+				$height_str = $height.' cm';
 			}
 			else {
 				$bmiR = (($fromData_arr['weight']/(pow($fromData_arr['height'],2)))*703);
@@ -48,11 +53,14 @@
 		$calc_choice = '';
 		if ($fromData_arr['bmibmr'] == 'bmr') {
 			////////////////////weight convert
+			$bmr_weight = $fromData_arr['weight'];
+			$bmr_weight = str_replace(',', '.', $bmr_weight);
+//			$bmr_weight = str_replace('.', '', $bmr_weight);
 			if ($fromData_arr['uVal'] == 'kg') {
-				$bmr_weight = $fromData_arr['weight'];
+				$bmr_weight = $bmr_weight;
 			}
 			else {
-				$bmr_weight = $fromData_arr['weight']/(2.2);
+				$bmr_weight = $bmr_weight/(2.2);
 			}
 
 			//////////////////// Male/female Coefficient

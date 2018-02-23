@@ -20,20 +20,20 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="form-group">
-                        <label for="age">Idade</label>
-                        <input type="text" class="form-control" name="age">
-                    </div>
+	  		<div class="form-group">
+		      <label for="age">Idade</label>
+		      <input type="text" class="form-control" name="age" onkeypress="return SomenteNumeros(event);" maxlength="3">
+		    </div>
 
-                    <div class="form-group">
-                        <label for="weight">Peso (kg)</label>
-                        <input type="text" class="form-control" name="weight">
-                    </div>
+	  		<div class="form-group">
+		      <label for="weight">Peso (Kg)</label>
+		      <input type="text" class="form-control" name="weight" onkeypress="return SomenteNumero(event);" maxlength="6">
+		    </div>
 
-                    <div class="form-group">
-                        <label for="height">Centímetros (cm)</label>
-                        <input type="text" class="form-control"  name="height">
-                    </div>
+		    <div class="form-group">
+		      <label for="height">Altura (Centímetros)</span>
+		      <input type="text" class="form-control"  name="height" onkeypress="return SomenteNumero(event);" maxlength="6">
+		    </div>
 
 
                     <div class="bfatguide">
