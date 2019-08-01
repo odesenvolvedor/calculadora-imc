@@ -6,26 +6,25 @@ jQuery(document).ready(function ($) {
         var formData = $("#bmibmrCalc").serializeArray();
         var URL = $("#bmibmrCalc").attr("action");
         $.post(URL,
-            formData,
-            function (data, textStatus, jqXHR) {
-                calculateDivMetric(data);
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-            });
+                formData,
+                function (data, textStatus, jqXHR) {
+                    calculateDivMetric(data);
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+        });
     });
 
     ///////////////////
     function calculateDivMetric(outData) {
         var parsData = jQuery.parseJSON(outData);
         var weight = parsData.weight, height = parsData.height;
-        weight = weight.replace(",", "."); 
+        weight = weight.replace(",", ".");
         height = height.replace(",", "");
         height = height.replace(".", "");
 
         formdataSave = outData;
         if (parsData.uVal == 'kg') {
             var bmiindex = weight / ((height / 100) * (height / 100));
-        }
-        else {
+        } else {
             var bmiindex = weight / ((height) * (height)) * 703;
         }
 
@@ -60,8 +59,8 @@ jQuery(document).ready(function ($) {
 			</div>\
 		</div>');
 
-            //            $('#bmiloggedin').html('<hr> Por estar logado, você pode <br/><strong><a id="saveBData" href="#">Salvar dados</a></strong> <br />e recuperá-lo a qualquer momento, fazendo login!');
-            //          $('.notauser').html('<h4 style="color:#FF5C00;">Usuários registrados podem salvar dados para referência posterior!</h4>');
+            $('#bmiloggedin').html('<hr> Por estar logado, você pode <br/><strong><a id="saveBData" href="#">Salvar dados</a></strong> <br />e recuperá-lo a qualquer momento, fazendo login!');
+            $('.notauser').html('<h4 style="color:#FF5C00;">Usuários registrados podem salvar dados para referência posterior!</h4>');
 
 
 
@@ -69,18 +68,14 @@ jQuery(document).ready(function ($) {
                 var calcFront = $("#bmibmrCalc").serializeArray();
                 var URL = $("#calcFront").attr("data-calcFront");
                 $.post(URL,
-                    calcFront,
-                    function (data, textStatus, jqXHR) {
-                        //bmibmrRes
-                        $("#bmibmrRes").prepend(data);
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                    });
-            }
-            ;
+                        calcFront,
+                        function (data, textStatus, jqXHR) {
+                            $("#bmibmrRes").prepend(data);
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                });
+            };
 
-
-        }
-        else {
+        } else {
             $('#bmibmrRes').html('<h3 style="color:red;">Digite TODOS os dados</h3>');
             $('#bmiloggedin').empty();
         }
@@ -136,33 +131,30 @@ jQuery(document).ready(function ($) {
 
         var URL = $(this).attr("data-formPath");
         $.post(URL,
-            function (data, textStatus, jqXHR) {
-                $("#clientlist").empty();
-                var userData = $.parseJSON(data);
+                function (data, textStatus, jqXHR) {
+                    $("#clientlist").empty();
+                    var userData = $.parseJSON(data);
 
-                $("#clientlist").append("<ul>");
-                $.each(userData, function () {
-                    $("#clientlist").append("<li class='clientitem' data-userid='" + this.ID + "' ><strong>" + this.user_login + "</strong>, <i>" + this.user_email + "</i></li>");
-                });
-                $("#clientlist").append("</ul>");
-                $("#clientlistbtn").click();
+                    $("#clientlist").append("<ul>");
+                    $.each(userData, function () {
+                        $("#clientlist").append("<li class='clientitem' data-userid='" + this.ID + "' ><strong>" + this.user_login + "</strong>, <i>" + this.user_email + "</i></li>");
+                    });
+                    $("#clientlist").append("</ul>");
+                    $("#clientlistbtn").click();
 
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-            });
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+        });
     });
 
     $(document).on("click", '.clientitem', function () {
 
 
         var pluginURL = $("#hiddenppath").attr("data-Path");
-        //console.log(pluginURL);
 
         var clientID = $(this).attr("data-userid");
-        //console.log(clientID);
-
 
         $.ajax({
-            url: pluginURL + "/bmi-bmr-calculator/includes/client.php",
+            url: pluginURL + "/calculadora-imc/includes/client.php",
             data: {
                 'clientid': clientID
             },
@@ -219,8 +211,6 @@ jQuery(document).ready(function ($) {
     //////////////////////////////
     $('.btn-group').button();
 
-
-
     $('body').on("click", "#uVal1", function (ev) {
         $("#weight").html("libras (lbs)");
         $("#height").html("polegadas (in)");
@@ -257,20 +247,26 @@ jQuery(document).ready(function ($) {
 
 function SomenteNumeros(e) {
     var tecla = (window.event) ? event.keyCode : e.which;
-    if ((tecla > 47 && tecla < 58)) return true;
+    if ((tecla > 47 && tecla < 58))
+        return true;
     else {
-        if (tecla == 8 || tecla == 0) return true;
-        else return false;
+        if (tecla == 8 || tecla == 0)
+            return true;
+        else
+            return false;
     }
 }
 
 function SomenteNumero(e) {
     var tecla = (window.event) ? event.keyCode : e.which;
-    if ((tecla > 47 && tecla < 58)) return true;
+    if ((tecla > 47 && tecla < 58))
+        return true;
     else {
-        if (tecla == 8 || tecla == 0) return true;
-        else 
-            if (tecla == 44 || tecla == 46) return true;
-                return false;
+        if (tecla == 8 || tecla == 0)
+            return true;
+        else
+        if (tecla == 44 || tecla == 46)
+            return true;
+        return false;
     }
 }

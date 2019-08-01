@@ -1,20 +1,19 @@
 <?php
 /**
- * Plugin Name: BMI BMR calculator
- * Plugin URI: http://wordpress.org/plugins/bmi-bmr-calculator/
- * Description: Body Mass Index and Basal Metabolic Rate calculator that saves calculation data for logged in users.
+ * Plugin Name: Calculadora IMC
+ * Description: Calculadora de Índice de Massa Corporal e Taxa Metabólica Basal.
  * Version: 1.3
- * Author: Robert Paleka
- * License: GPL2
+ * Author: Fernando Campos
+ * License: MIT
  */
 //The css and the js will be loaded only on the page where shortcode is used - start
 add_action('init', 'bmibmr_register');
 add_action('wp_footer', 'bmibmr_append_scripts');
 
 function bmibmr_register() {
-    wp_register_script('bmibmr_script', plugins_url() . '/bmi-bmr-calculator/fitness_body_calculator.js');
-    wp_register_script('modernizr', plugins_url() . '/bmi-bmr-calculator/includes/js/modernizr.js');
-    wp_register_script('bootstrapjs', plugins_url() . '/bmi-bmr-calculator/assets/bootstrap/js/bootstrap.js');
+    wp_register_script('bmibmr_script', plugins_url() . '/calculadora-imc/fitness_body_calculator.js');
+    wp_register_script('modernizr', plugins_url() . '/calculadora-imc/includes/js/modernizr.js');
+    wp_register_script('bootstrapjs', plugins_url() . '/calculadora-imc/assets/bootstrap/js/bootstrap.js');
 
     wp_register_style('bmibmr_style', plugins_url('style_bmi.css', __FILE__));
     wp_register_style('typicons', plugins_url('assets/icons/typicons.min.css', __FILE__));
@@ -55,7 +54,7 @@ function bmibmr_register_settings() {
 add_action('admin_init', 'bmibmr_register_settings');
 
 function bmibmr_register_options_page() {
-    add_options_page('Bmi Bmr Calculator', 'Bmi Bmr Calculator', 'manage_options', 'wphub-options', 'bmibmr_options_page');
+    add_options_page('Calculadora IMC', 'Calculadora IMC', 'manage_options', 'wphub-options', 'bmibmr_options_page');
 }
 
 add_action('admin_menu', 'bmibmr_register_options_page');
@@ -63,125 +62,20 @@ add_action('admin_menu', 'bmibmr_register_options_page');
 function bmibmr_options_page() {
     ?>
     <div class="wrap">
-        <?php screen_icon(); ?>
         <h2>Calculadora IMC</h2>
         <h3>Informações</h3>
         <p>O <i>css</i> e o <i>js</i> será carregado apenas na página / publicação onde o código abreviado é usado.</p>
         <p>Use <code>[bmibmr]</code> shortcode na postagem ou na página para exibir os formulários IMC e BMR.</p>
-        <p>Após o registro, os usuários podem salvar seus cálculos para revisão posterior!</p>
         <br>
-        <small>*Todos os resultados calculados com este plugin são aproximados com base em dados inseridos pelo usuário. Se você quiser dados reais e precisos que o ajudarão a obter os resultados desejados, entre em contato com Maria em <a href="mailto:mariatresoglavic@gmail.com">mariatresoglavic@gmail.com</a>.</small><hr>
+        <hr>
         <footer>
-            Para perguntas técnicas sobre o contato do plugin  <a href="mailto:fernandocamp7@gmail.com">fernandocamp7@gmail.com</a>
+            Para perguntas técnicas sobre o plugin, contate:  <a href="mailto:fernando@odesenvolvedor.net">fernando@odesenvolvedor.net</a>
         </footer>
     </div>
 <?php
 }
 
 //Admin settings
-?><?php
-
-//db table installation ** start
-function bmibmr_create_db_table() {
-
-    global $wpdb;
-    $bmibmr_tablename = $wpdb->prefix . "bmibmr";
-
-    $bmibmr_sql = "CREATE TABLE IF NOT EXISTS $bmibmr_tablename (
-				  `id` int(11) NOT NULL AUTO_INCREMENT,
-				  `userid` int(11) NOT NULL,
-				  `formdata` text NOT NULL,
-				  `timeof` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				  PRIMARY KEY (`id`)
-				)";
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-    dbDelta($bmibmr_sql);
-}
-
-/* run the table creation function only on plugin activation */
-register_activation_hook(__FILE__, 'bmibmr_create_db_table');
-//db table installation ** end
-//@todo Delete table on deactivation of plugin
-//db
-register_activation_hook(__FILE__, 'get_saved_bmibmr');
-
-function get_saved_bmibmr($iduser = null) {
-    global $wpdb;
-
-    if ( isset($iduser))  {
-        $userid = $iduser;
-    }
-    else {
-        $userid = get_current_user_id();
-    }
-
-    $table_name = $wpdb->prefix . 'bmibmr';
-
-
-    $savedRows = $wpdb->get_results($wpdb->prepare('SELECT * FROM ' . $table_name . ' WHERE userid = %d order by id desc', $userid));
-
-    return $savedRows;
-    //print_r($savedRows);
-}
-
-function bmibmr_front_calc() {
-    if (isset($_REQUEST)) {
-
-        //$calcFront = $_REQUEST['calcFrontData'];
-
-        print_r($_POST);
-        // $dbCalc = json_encode($holdData);
-        //print_r($dbCalc);
-        //echo $dbCalc;
-    }
-    die();
-}
-
-add_action('wp_ajax_bmibmr_front_calc', 'bmibmr_front_calc');
-
-function bmibmr_save() {
-    if (isset($_REQUEST)) {
-
-        $holdData = $_REQUEST['holdData'];
-
-        //print_r ($holdData);
-        $dbCalc = json_encode($holdData);
-        // print_r($_REQUEST);
-        //echo $dbCalc;
-
-        global $wpdb;
-        $userid = get_current_user_id();
-
-        $wpdb->insert($wpdb->prefix . 'bmibmr', array(
-                'userid' => $userid,
-                'formdata' => $dbCalc,
-            ), array(
-                '%d',
-                '%s'
-            )
-        );
-    }
-    die();
-}
-
-add_action('wp_ajax_bmibmr_save', 'bmibmr_save');
-
-add_action('wp_head', 'bmibmr_custom_head');
-
 function bmibmr_custom_head() {
     echo '<script type="text/javascript">var ajaxurl = \'' . admin_url('admin-ajax.php') . '\';</script>';
 }
-
-//todo
-//create join with custom table for users data from wp_bmibmr_users
-function get_bmibmr_users( $id = '' ) {
-
-    global $wpdb, $blog_id;
-    $userid = get_current_user_id();//get all the users except the current one logged in
-    if ( empty($id) )
-        $id = (int) $blog_id;
-    $blog_prefix = $wpdb->get_blog_prefix($id);
-    $users = $wpdb->get_results( "SELECT user_id, user_id AS ID, user_login, display_name, user_email, meta_value FROM $wpdb->users, $wpdb->usermeta WHERE {$wpdb->users}.ID = {$wpdb->usermeta}.user_id AND {$wpdb->usermeta}.user_id != ".$userid." AND meta_key = '{$blog_prefix}capabilities' ORDER BY {$wpdb->usermeta}.user_id" );
-    return $users;
-}
-?>
