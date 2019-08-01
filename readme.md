@@ -1,10 +1,10 @@
-=== BMI BMR Calculator ===
-Contributors: Fernando Campos de Oliveira
-Tags: IMC TMB, Índice de Massa Corporal, Taxa Metabólica Basal, Calculadora
-Requires at least: 3.7
-Tested up to: 5
-Stable tag: 1.3
-License: MIT
+=== BMI BMR Calculator ===  
+Contributors: Fernando Campos de Oliveira  
+Tags: IMC TMB, Índice de Massa Corporal, Taxa Metabólica Basal, Calculadora  
+Requires at least: 3.7  
+Tested up to: 5  
+Stable tag: 1.3  
+License: MIT  
 
 
 Calculadora de índice de massa corporal e da taxa metabólica basal.
